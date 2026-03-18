@@ -42,8 +42,10 @@
 </head>
 <body class="text-slate-800 antialiased h-[100dvh] w-full flex flex-col overflow-hidden bg-[#f9f8f6]">
 
+    <!-- Header (Deep Teal Ocean Vibe) -->
     <header class="bg-teal-900 text-stone-50 py-4 px-4 md:px-6 shadow-md flex-shrink-0 z-40 relative flex items-center justify-between">
         <div class="flex items-center">
+            <!-- Mobile Hamburger Menu Button -->
             <button id="menu-toggle" class="md:hidden text-2xl mr-4 focus:outline-none hover:text-orange-300 transition-colors">
                 ☰
             </button>
@@ -59,10 +61,13 @@
         </div>
     </header>
 
+    <!-- Main Content Area -->
     <main class="flex-grow flex relative w-full h-full overflow-hidden bg-[#f9f8f6]">
         
+        <!-- Mobile Overlay -->
         <div id="mobile-overlay" class="absolute inset-0 bg-teal-900/40 z-20 hidden md:hidden backdrop-blur-sm transition-opacity"></div>
 
+        <!-- Left Column: Navigation Menu -->
         <section id="sidebar" class="absolute md:relative inset-y-0 left-0 z-30 w-72 md:w-80 bg-white border-r border-stone-200 flex flex-col h-full shadow-2xl md:shadow-none transform -translate-x-full md:translate-x-0">
             <div class="p-4 bg-stone-50 border-b border-stone-200 flex justify-between items-center flex-shrink-0">
                 <h2 class="text-sm font-bold text-teal-800 uppercase tracking-widest">Itinerary & Tools</h2>
@@ -70,6 +75,7 @@
             </div>
             
             <div class="overflow-y-auto scroll-area flex-grow flex flex-col pb-6 md:pb-0">
+                <!-- Overview Tab -->
                 <button id="tab-overview" class="nav-btn w-full text-left px-5 py-4 hover:bg-stone-200 focus:outline-none flex items-center justify-between border-b border-stone-200 bg-stone-50/50">
                     <div>
                         <span class="text-xs font-bold text-blue-600 uppercase tracking-wider">Overview</span>
@@ -78,9 +84,11 @@
                     <div class="text-xl opacity-80">📖</div>
                 </button>
 
+                <!-- Day List Container -->
                 <div id="day-list" class="flex-grow"></div>
 
                 <div class="border-t border-stone-200 bg-stone-50 mt-auto flex-shrink-0">
+                    <!-- Finance Tab -->
                     <button id="tab-finance" class="nav-btn w-full text-left px-5 py-4 hover:bg-stone-200 focus:outline-none flex items-center justify-between">
                         <div>
                             <span class="text-xs font-bold text-emerald-600 uppercase tracking-wider">Tracker & Budget</span>
@@ -92,10 +100,13 @@
             </div>
         </section>
 
+        <!-- Right Column: Dynamic Content Panel -->
         <section class="flex-1 bg-[#f9f8f6] flex flex-col h-full overflow-y-auto scroll-area p-4 md:p-8 lg:px-12 relative" id="dynamic-content">
-            </section>
+            <!-- Content gets injected here -->
+        </section>
     </main>
 
+    <!-- App Logic & Firebase Integration -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
         import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
@@ -229,13 +240,15 @@
             if (window.innerWidth < 768) closeMenu();
         };
 
-        // --- Badge & Map Helpers ---
+        // --- Badge, Food & Map Helpers ---
         const badgeTransit = `<span class="bg-indigo-100 text-indigo-700 px-1.5 py-0.5 rounded border border-indigo-200 text-[10px] uppercase font-bold tracking-wider ml-2 shadow-sm whitespace-nowrap align-middle inline-flex items-center"><span class="mr-1 text-[12px]">🚆</span>大眾運輸</span>`;
         const badgeGrab = `<span class="bg-green-100 text-green-800 px-1.5 py-0.5 rounded border border-green-300 text-[10px] uppercase font-bold tracking-wider ml-2 shadow-sm whitespace-nowrap align-middle inline-flex items-center"><span class="mr-1 text-[12px]">🚕</span>Grab</span>`;
         const badgeFlight = `<span class="bg-sky-100 text-sky-700 px-1.5 py-0.5 rounded border border-sky-200 text-[10px] uppercase font-bold tracking-wider ml-2 shadow-sm whitespace-nowrap align-middle inline-flex items-center"><span class="mr-1 text-[12px]">✈️</span>航空飛行</span>`;
         const badgeFerry = `<span class="bg-teal-100 text-teal-700 px-1.5 py-0.5 rounded border border-teal-200 text-[10px] uppercase font-bold tracking-wider ml-2 shadow-sm whitespace-nowrap align-middle inline-flex items-center"><span class="mr-1 text-[12px]">🚢</span>跨國船班</span>`;
         
         const gmap = (query) => `<a href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(query)}" target="_blank" title="開啟地圖" class="text-[12px] whitespace-nowrap ml-1.5 inline-flex items-center bg-white px-1.5 py-0.5 rounded shadow-sm border border-stone-200 opacity-70 hover:opacity-100 transition-opacity">📍</a>`;
+
+        const guideStr = (text) => `<div class="mt-1 bg-stone-50 border border-stone-200 rounded-lg p-2 text-xs text-slate-600 shadow-sm"><span class="font-bold text-orange-600">💡 必點攻略：</span>${text}</div>`;
 
         // 麗貝島美食與酒吧口袋名單
         const lipeFoodList = `
@@ -247,29 +260,49 @@
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-6 text-sm text-slate-700">
                     <div>
                         <div class="font-bold text-slate-800 mb-2 px-2 border-l-4 border-orange-500 bg-orange-50/50 py-1">🦀 豪邁海鮮</div>
-                        <ul class="space-y-2 pl-2 mt-2">
-                            <li>• <b>Nee Papaya BBQ</b> (挑大頭蝦/檸檬魚) ${gmap('Nee Papaya Koh Lipe')}</li>
-                            <li>• <b>King Crab Seafood</b> (步行街新鮮現撈) ${gmap('King Crab Seafood Koh Lipe')}</li>
-                            <li>• <b>Papaya Mom</b> (青木瓜沙拉/烤雞) ${gmap('Papaya Mom Koh Lipe')}</li>
+                        <ul class="space-y-3 pl-2 mt-2">
+                            <li>• <b>Nee Papaya BBQ</b> ${gmap('Nee Papaya Koh Lipe')}
+                                <div class="text-xs text-slate-500 mt-0.5">必點：現烤大頭蝦、檸檬蒸魚佐綠色海鮮辣醬。</div>
+                            </li>
+                            <li>• <b>King Crab Seafood</b> ${gmap('King Crab Seafood Koh Lipe')}
+                                <div class="text-xs text-slate-500 mt-0.5">必點：門口現撈活海鮮秤重代客料理。</div>
+                            </li>
+                            <li>• <b>Papaya Mom</b> ${gmap('Papaya Mom Koh Lipe')}
+                                <div class="text-xs text-slate-500 mt-0.5">必點：青木瓜沙拉 (Som Tum)、泰式烤雞、冬蔭功。</div>
+                            </li>
                         </ul>
                     </div>
                     
                     <div>
                         <div class="font-bold text-slate-800 mb-2 px-2 border-l-4 border-teal-500 bg-teal-50/50 py-1">🍹 微醺與火舞酒吧</div>
-                        <ul class="space-y-2 pl-2 mt-2">
-                            <li>• <b>Zodiac Seesun Resort</b> (必看！最棒沙灘火舞) ${gmap('Zodiac Seesun Resort Koh Lipe')}</li>
-                            <li>• <b>Happy Vibe Bar</b> (日落沙灘懶骨頭) ${gmap('Happy Vibe Bar Koh Lipe')}</li>
-                            <li>• <b>Sea La Vie Bar</b> (超 Chill 海景小酒吧) ${gmap('Sea La Vie Bar Koh Lipe')}</li>
+                        <ul class="space-y-3 pl-2 mt-2">
+                            <li>• <b>Zodiac Seesun Resort</b> ${gmap('Zodiac Seesun Resort Koh Lipe')}
+                                <div class="text-xs text-slate-500 mt-0.5">必看：島上最壯觀的沙灘火舞表演。</div>
+                            </li>
+                            <li>• <b>Happy Vibe Bar</b> ${gmap('Happy Vibe Bar Koh Lipe')}
+                                <div class="text-xs text-slate-500 mt-0.5">必點：點杯 Mojito 躺在懶骨頭上看夕陽。</div>
+                            </li>
+                            <li>• <b>Sea La Vie Bar</b> ${gmap('Sea La Vie Bar Koh Lipe')}
+                                <div class="text-xs text-slate-500 mt-0.5">特點：氣氛極佳、人潮較少的海景秘境酒吧。</div>
+                            </li>
                         </ul>
                     </div>
 
                     <div class="col-span-full">
                         <div class="font-bold text-slate-800 mb-2 px-2 border-l-4 border-rose-400 bg-rose-50/50 py-1">🍢 街頭小吃與異國料理</div>
-                        <ul class="space-y-2 pl-2 grid grid-cols-1 md:grid-cols-2 gap-2 mt-2">
-                            <li>• <b>La Luna</b> (島上第一名薄皮披薩) ${gmap('La Luna Koh Lipe')}</li>
-                            <li>• <b>Madame Yoohoo</b> (香蕉巧克力煎餅) ${gmap('Madame Yoohoo Koh Lipe')}</li>
-                            <li>• <b>Elephant Coffee House</b> (美式漢堡/早午餐) ${gmap('Elephant Coffee House Koh Lipe')}</li>
-                            <li>• <b>義式冰淇淋 Gelato</b> (步行街上尋寶，消暑必吃！)</li>
+                        <ul class="space-y-3 pl-2 grid grid-cols-1 md:grid-cols-2 gap-2 mt-2">
+                            <li>• <b>La Luna</b> ${gmap('La Luna Koh Lipe')}
+                                <div class="text-xs text-slate-500 mt-0.5">必點：瑪格麗特薄皮披薩、黑松露義大利麵。</div>
+                            </li>
+                            <li>• <b>Madame Yoohoo</b> ${gmap('Madame Yoohoo Koh Lipe')}
+                                <div class="text-xs text-slate-500 mt-0.5">必點：香蕉巧克力起司煎餅 (Roti)。</div>
+                            </li>
+                            <li>• <b>Elephant Coffee House</b> ${gmap('Elephant Coffee House Koh Lipe')}
+                                <div class="text-xs text-slate-500 mt-0.5">必點：經典雙層牛肉漢堡、冰美式。</div>
+                            </li>
+                            <li>• <b>步行街散策</b>
+                                <div class="text-xs text-slate-500 mt-0.5">必點：Moo Ping (泰式烤豬肉串)、義式冰淇淋 Gelato。</div>
+                            </li>
                         </ul>
                     </div>
                 </div>
@@ -279,6 +312,7 @@
         const itineraryData = [
             {
                 day: "Day 1 (台灣 ➔ 蘭卡威)", date: "3/21 (六)", title: "啟程與開齋節夜市", icon: "✈️",
+                imageDesc: "",
                 details: `
                     <ul class="space-y-5 text-sm px-1">
                         <li class="flex items-start">
@@ -291,7 +325,9 @@
                             <div class="pt-0.5 leading-relaxed"><b>13:25</b> 抵達吉隆坡 KLIA T1 ${gmap("Kuala Lumpur International Airport Terminal 1")}。</div>
                         </li>
                         <li class="flex items-start">
-                            <div class="pt-0.5 leading-relaxed"><b>14:40 (機場吃逛)</b> 入境後直奔 Level 5 出境大廳吃 <b>「華陽冰室」</b> 的酥皮蛋塔。吃飽可在機場逛逛免稅店，或買杯大馬人氣的 <b>Bask Bear Coffee (黑糖熊咖啡)</b> 🌴。</div>
+                            <div class="pt-0.5 leading-relaxed"><b>14:40 (機場吃逛)</b> 入境後直奔 Level 5 出境大廳吃 <b>「華陽冰室」</b>。吃飽可在機場買杯 <b>Bask Bear Coffee (黑糖熊咖啡)</b>。
+                            ${guideStr("華陽冰室必點：極厚酥皮蛋塔、冰火菠蘿包、冰鎮華陽白咖啡。")}
+                            </div>
                         </li>
                         <li class="flex items-start">
                             <div class="pt-0.5 leading-relaxed"><b>18:55</b> 轉機飛往蘭卡威 (MH 1450)，20:00 抵達 (LGK)，國內線免過海關直接領行李。 ${badgeFlight}</div>
@@ -303,15 +339,15 @@
                             <div class="pt-0.5 leading-relaxed"><b>21:00</b> 入住 <b>Bayview Hotel Langkawi</b> ${gmap("Bayview Hotel Langkawi")}。</div>
                         </li>
                         <li class="flex items-start">
-                            <div class="pt-0.5 leading-relaxed"><b>21:30 (夜市尋寶)</b> 步行前往 <b>瓜鎮週六夜市</b> ${gmap("Kuah Night Market")} 感受開齋節氣氛！<br>
-                                <span class="text-teal-700 font-semibold mt-2 inline-block bg-teal-50 px-2 py-1 rounded">💡 夜市必吃推薦：</span><br>
-                                除了沙嗲與烤雞，一定要嚐嚐 <b>Roti Jala (網煎餅沾咖哩)</b>、<b>Murtabak (馬來厚餡餅)</b>、<b>Ayam Percik (椰汁香料烤雞)</b>，還要買袋色彩繽紛的 <b>Air Balang (桶裝特色冰飲)</b>！
+                            <div class="pt-0.5 leading-relaxed"><b>21:30 (夜市尋寶)</b> 步行前往 <b>瓜鎮週六夜市</b> ${gmap("Kuah Night Market")} 感受開齋節氣氛！
+                            ${guideStr("夜市必買：馬來沙嗲串(Satay)、Ayam Percik(椰汁香料烤雞)、Roti Jala(網煎餅沾咖哩)、Murtabak(馬來厚餡餅)、Air Balang(桶裝玫瑰露/美祿冰飲)。")}
                             </div>
                         </li>
                     </ul>`
             },
             {
                 day: "Day 2 (蘭卡威 ➔ 麗貝島)", date: "3/22 (日)", title: "登島！泰國馬爾地夫", icon: "🏝️",
+                imageDesc: "",
                 details: `
                     <div class="bg-rose-50 text-rose-800 p-4 rounded-xl mb-6 text-sm border border-rose-200 shadow-sm flex items-start">
                         <span class="text-xl mr-2">⚠️</span>
@@ -331,13 +367,14 @@
                             <div class="pt-0.5 leading-relaxed"><b>11:00</b> 抵達 <b>Akira Lipe Resort</b> 寄放行李，換上泳裝準備度假！ ${gmap("Akira Lipe Resort")}</div>
                         </li>
                         <li class="flex items-start">
-                            <div class="pt-0.5 leading-relaxed"><b>午後與晚餐</b> 參考下方清單隨興吃午餐、下午茶與晚餐。傍晚可以到沙灘看日落。</div>
+                            <div class="pt-0.5 leading-relaxed"><b>午後與晚餐</b> 請參考下方清單隨興吃午餐、下午茶與晚餐。傍晚可以到沙灘看日落。</div>
                         </li>
                     </ul>
                     ${lipeFoodList}`
             },
             {
                 day: "Day 3 (麗貝島)", date: "3/23 (一)", title: "內圈包船浮潛", icon: "🤿",
+                imageDesc: "",
                 details: `
                     <ul class="space-y-5 text-sm px-1">
                         <li class="flex items-start">
@@ -347,13 +384,14 @@
                             <div class="pt-0.5 leading-relaxed"><b>下午</b> 回 Akira 泳池邊休息，或是到步行街上買杯清爽的<b>義式冰淇淋 (Gelato)</b> 或現剖椰子解暑！</div>
                         </li>
                         <li class="flex items-start">
-                            <div class="pt-0.5 leading-relaxed"><b>晚上</b> 參考下方清單，挑選今晚想翻牌的美食與火舞酒吧！</div>
+                            <div class="pt-0.5 leading-relaxed"><b>晚上</b> 請參考下方清單，挑選今晚想翻牌的美食與火舞酒吧！</div>
                         </li>
                     </ul>
                     ${lipeFoodList}`
             },
             {
                 day: "Day 4 (麗貝島)", date: "3/24 (二)", title: "島上發懶耍廢模式", icon: "🦦",
+                imageDesc: "",
                 details: `
                     <ul class="space-y-5 text-sm px-1">
                         <li class="flex items-start">
@@ -373,10 +411,13 @@
             },
             {
                 day: "Day 5 (麗貝島)", date: "3/25 (三)", title: "獨木舟 & 懸崖浪漫夜", icon: "🛶",
+                imageDesc: "",
                 details: `
                     <ul class="space-y-5 text-sm px-1">
                         <li class="flex items-start">
-                            <div class="pt-0.5 leading-relaxed"><b>09:30</b> (可選) 散步至 <b>Castaway Resort</b> 在木造涼亭看海吃早餐 ${gmap("Castaway Resort Koh Lipe")}。</div>
+                            <div class="pt-0.5 leading-relaxed"><b>09:30</b> (可選) 散步至 <b>Castaway Resort</b> 在木造涼亭看海吃早餐 ${gmap("Castaway Resort Koh Lipe")}。
+                            ${guideStr("推薦點英式大早餐 (English Breakfast) 搭配新鮮現打果汁。")}
+                            </div>
                         </li>
                         <li class="flex items-start">
                             <div class="pt-0.5 leading-relaxed"><b>11:00</b> 活動：租 <b>透明獨木舟</b> 划向無人島。</div>
@@ -385,13 +426,16 @@
                             <div class="pt-0.5 leading-relaxed"><b>16:00</b> 放鬆：找間優質按摩店做 <b>Aloe Vera 蘆薈修復按摩</b>，舒緩曬後的肌膚。</div>
                         </li>
                         <li class="flex items-start">
-                            <div class="pt-0.5 leading-relaxed"><b>18:00 (晚餐)</b> <b>On The Rocks (Serendipity Resort)</b>。<br>重點：在懸崖景觀餐廳看著絕美夕陽，享用浪漫的咖哩蟹雙人晚餐 ${gmap("On The Rocks Restaurant Koh Lipe")}。</div>
+                            <div class="pt-0.5 leading-relaxed"><b>18:00 (晚餐)</b> <b>On The Rocks (Serendipity Resort)</b>。<br>重點：在懸崖景觀餐廳看著絕美夕陽，享用浪漫晚餐 ${gmap("On The Rocks Restaurant Koh Lipe")}。
+                            ${guideStr("必點：黃咖哩炒蟹 (Yellow Curry Crab)、蒜香奶油烤明蝦，點杯白酒佐夕陽。")}
+                            </div>
                         </li>
                     </ul>
                     ${lipeFoodList}`
             },
             {
                 day: "Day 6 (麗貝島 ➔ 吉隆坡)", date: "3/26 (四)", title: "都會轉場 & 快閃美食", icon: "🏙️",
+                imageDesc: "",
                 details: `
                     <div class="bg-rose-50 text-rose-800 p-4 rounded-xl mb-6 text-sm border border-rose-200 shadow-sm flex items-start">
                         <span class="text-xl mr-2">⚠️</span>
@@ -402,26 +446,31 @@
                             <div class="pt-0.5 leading-relaxed"><b>10:45 (泰國時間)</b> 搭船返回蘭卡威。13:15 抵達瓜鎮碼頭。 ${badgeFerry}</div>
                         </li>
                         <li class="flex items-start">
-                            <div class="pt-0.5 leading-relaxed"><b>13:30 (蘭卡威快閃)</b> 巨鷹廣場拍照、免稅店買巧克力。午餐安排在地極受歡迎的：<b>露天海鮮飯店 (Rootian Seafood)</b> 必點奶油蝦！ ${gmap('Rootian Seafood Langkawi')}</div>
+                            <div class="pt-0.5 leading-relaxed"><b>13:30 (蘭卡威快閃)</b> 巨鷹廣場拍照、免稅店買巧克力。午餐安排在地極受歡迎的：<b>露天海鮮飯店 (Rootian Seafood)</b> ${gmap('Rootian Seafood Langkawi')}
+                            ${guideStr("必點：濕奶油蝦 (記得點炸饅頭沾濃郁的奶油醬汁！)、鹹蛋軟殼蟹、星洲炒米粉。")}
+                            </div>
                         </li>
                         <li class="flex items-start">
                             <div class="pt-0.5 leading-relaxed"><b>18:55</b> 搭乘 MH 1450 從蘭卡威 (LGK) 起飛，20:00 降落吉隆坡 (KUL)。 ${badgeFlight}</div>
                         </li>
                         <li class="flex items-start">
-                            <div class="pt-0.5 leading-relaxed"><b>20:30 (機場快線)</b> 從機場搭乘 <b>KLIA Ekspres</b> 直達 KL Sentral 站 (車程 28 分鐘，空間大且舒適)。 ${badgeTransit}</div>
+                            <div class="pt-0.5 leading-relaxed"><b>20:30 (神級轉乘路線)</b> 從機場搭乘 <b>KLIA Transit (機場支線)</b> 至 <b>Putrajaya Sentral 站</b> (車程 20 分鐘)，同站無縫轉乘 <b>MRT 黃線(Putrajaya Line)</b> 直達 <b>Conlay 站 (PY29)</b>。帶著29吋大行李這樣轉乘最輕鬆，完全避開市區恐怖塞車與 KL Sentral 的複雜迷宮！ ${badgeTransit}</div>
                         </li>
                         <li class="flex items-start">
-                            <div class="pt-0.5 leading-relaxed"><b>21:00 (轉乘捷運)</b> 在 KL Sentral 站內無縫轉乘 <b>LRT Kelana Jaya Line (紅線)</b>，搭至 <b>KLCC 站 (KJ10)</b> 下車，步行約 8-10 分鐘即可抵達飯店！(全程免叫車不怕塞車) ${badgeTransit}</div>
-                        </li>
-                        <li class="flex items-start">
-                            <div class="pt-0.5 leading-relaxed"><b>21:40</b> 入住 <b>Wyndham Suites KLCC</b> ${gmap("Wyndham Suites KLCC")}。</div>
+                            <div class="pt-0.5 leading-relaxed"><b>21:40</b> 從 Conlay 站出站步行 3-5 分鐘即可入住 <b>Wyndham Suites KLCC</b> ${gmap("Wyndham Suites KLCC")}。</div>
                         </li>
                         <li class="flex items-start">
                             <div class="pt-0.5 leading-relaxed"><b>22:00 (宵夜出發)</b> 夜間行動加上人生地不熟，建議直接叫 Grab 前往宵夜點。 ${badgeGrab}<br>
-                                <ul class="mt-3 space-y-2 text-slate-600 border-l-2 border-stone-200 pl-3">
-                                    <li>• <b>黃亞華小食店</b> (招牌秘製烤雞翅與沙嗲) ${gmap("Wong Ah Wah Jalan Alor")}</li>
-                                    <li>• <b>Nasi Lemak Wanjo</b> (看著夜景吃椰漿飯) ${gmap("Nasi Lemak Wanjo")}</li>
-                                    <li>• <b>西湖飯店</b> (體驗大馬華人熱炒宵夜氣氛) ${gmap("Restoran West Lake Kuala Lumpur")}</li>
+                                <ul class="mt-3 space-y-3 text-slate-600 border-l-2 border-stone-200 pl-3">
+                                    <li>• <b>黃亞華小食店</b> ${gmap("Wong Ah Wah Jalan Alor")}
+                                        <div class="text-xs mt-0.5">必點：招牌秘製黑醬油烤雞翅、沙嗲、鹹蛋蘇東(魷魚)。</div>
+                                    </li>
+                                    <li>• <b>Nasi Lemak Wanjo</b> ${gmap("Nasi Lemak Wanjo")}
+                                        <div class="text-xs mt-0.5">必點：椰漿飯配 Ayam Goreng (香料炸雞) 與道地 Sambal 醬。</div>
+                                    </li>
+                                    <li>• <b>西湖飯店</b> ${gmap("Restoran West Lake Kuala Lumpur")}
+                                        <div class="text-xs mt-0.5">必點：大馬風味福建麵、宮保蝦膏、金香炸雞。</div>
+                                    </li>
                                 </ul>
                             </div>
                         </li>
@@ -429,13 +478,16 @@
             },
             {
                 day: "Day 7 (吉隆坡)", date: "3/27 (五)", title: "老城漫遊與米其林摘星", icon: "⭐",
+                imageDesc: "",
                 details: `
                     <ul class="space-y-5 text-sm px-1">
                         <li class="flex items-start">
-                            <div class="pt-0.5 leading-relaxed"><b>09:00 (前往老城)</b> 從飯店步行至 <b>LRT KLCC 站 (KJ10)</b>，搭乘 Kelana Jaya Line (紅線) 直達 <b>Pasar Seni 站 (KJ14)</b> 下車 (免換車，車程約 10 分鐘)，步行即可暢遊以下景點。 ${badgeTransit}</div>
+                            <div class="pt-0.5 leading-relaxed"><b>09:00 (前往老城)</b> 從飯店步行至 <b>MRT Conlay 站 (PY29)</b>，搭乘一站至 TRX 站，走到對面月台轉乘 MRT 綠線(Kajang Line) 直達 <b>Pasar Seni 站 (KG16)</b>，出站步行暢遊老城區。 ${badgeTransit}</div>
                         </li>
                         <li class="flex items-start">
-                            <div class="pt-0.5 leading-relaxed"><b>09:30 (老城早餐)</b> <b>源昌隆咖啡店 (Kafei Dian)</b> 經典咖椰吐司配半熟蛋 ${gmap('Kafei Dian Jalan Panggong')}。</div>
+                            <div class="pt-0.5 leading-relaxed"><b>09:30 (老城早餐)</b> <b>源昌隆咖啡店 (Kafei Dian)</b> ${gmap('Kafei Dian Jalan Panggong')}。
+                            ${guideStr("必點：傳統烤咖椰牛油吐司(Kaya Toast)、生熟蛋(加胡椒與醬油攪拌)、海南茶。")}
+                            </div>
                         </li>
                         <li class="flex items-start">
                             <div class="pt-0.5 leading-relaxed"><b>10:30</b> 步行順遊鬼仔巷 ${gmap("Kwai Chai Hong")}、REXKL 書店 ${gmap("REXKL")}。</div>
@@ -444,7 +496,16 @@
                             <div class="pt-0.5 leading-relaxed"><b>11:30 (老城挖寶)</b> <b>中央市場 (Central Market)</b>：體驗 DIY Batik 彩繪專屬對章磁鐵，旁邊的 <b>Kasturi Walk (卡斯杜里走廊)</b> 也很適合買藤編包與特色花襯衫 ${gmap("Central Market Kuala Lumpur")}。</div>
                         </li>
                         <li class="flex items-start">
-                            <div class="pt-0.5 leading-relaxed"><b>13:00 (必比登小吃)</b> 午餐：<b>麗豐啦啦米粉</b> (米酒薑絲湯頭超鮮甜) ${gmap('Lai Foong Lala Noodles')}。</div>
+                            <div class="pt-0.5 leading-relaxed"><b>13:00 (必比登小吃)</b> 午餐抉擇 (二選一)：<br>
+                                <ul class="mt-3 space-y-3 text-slate-600 border-l-2 border-stone-200 pl-3 ml-1">
+                                    <li>• <b>麗豐啦啦米粉</b> ${gmap('Lai Foong Lala Noodles')}
+                                        <div class="text-xs mt-0.5 font-bold text-orange-600">💡 必點攻略：招牌上湯啦啦米粉 (啦啦=蛤蜊，帶有濃郁的紹興酒與薑絲香氣，極度鮮甜)。</div>
+                                    </li>
+                                    <li>• <b>無厘頭啦啦米 (Wulitou)</b> ${gmap('Wulitou Lala Noodles Kuala Lumpur')}
+                                        <div class="text-xs mt-0.5 font-bold text-orange-600">💡 必點攻略：吉隆坡近期瘋狂排隊的另一家啦啦米選擇！主打鮮甜爆棚的蛤蜊清湯與 Q 彈米粉，如果您們想換個口味強烈推薦！</div>
+                                    </li>
+                                </ul>
+                            </div>
                         </li>
                         <li class="flex items-start">
                             <div class="pt-0.5 leading-relaxed"><b>14:45 (質感選物與獨立設計)</b> The Gasket Alley 位於八打靈再也 (PJ) 區，無直達捷運，<b>強烈建議吃飽後直接搭 Grab 過去</b>。 ${badgeGrab}<br>朝聖吉隆坡獨立設計品牌 Futuremade Studio (FTMD.)，喝 Hejaü 抹茶 ${gmap("The Gasket Alley Petaling Jaya")}。</div>
@@ -453,28 +514,35 @@
                             <div class="pt-0.5 leading-relaxed"><b>16:30 (回程換裝)</b> 週五傍晚易塞車，提早預留 45 分鐘搭 Grab 回飯店。洗個澡、換上帥氣的 Smart Casual 裝扮準備摘星！ ${badgeGrab}</div>
                         </li>
                         <li class="flex items-start">
-                            <div class="pt-0.5 leading-relaxed"><b>18:00 (已預約) 晚餐：Beta KL (米其林一星)</b> ${gmap("Beta KL")}<br>就在飯店隔壁棟 (Cormar Suites)，步行 2 分鐘即可抵達。吧台位，強烈建議搭配 Pairing 交換品嚐大馬解構料理。</div>
+                            <div class="pt-0.5 leading-relaxed"><b>18:00 (已預約) 晚餐：Beta KL (米其林一星)</b> ${gmap("Beta KL")}<br>就在飯店隔壁棟 (Cormar Suites)，步行 2 分鐘即可抵達。吧台位，近距離欣賞主廚料理。
+                            ${guideStr("必點：Tour of Malaysia Tasting Menu。強烈建議世育選 Wine Pairing，尚奕選 Cocktail Pairing 互相交換品嚐！")}
+                            </div>
                         </li>
                     </ul>`
             },
             {
                 day: "Day 8 (吉隆坡)", date: "3/28 (六)", title: "潮流探索與百萬夜景", icon: "🔥",
+                imageDesc: "",
                 details: `
                     <ul class="space-y-5 text-sm px-1">
                         <li class="flex items-start">
-                            <div class="pt-0.5 leading-relaxed"><b>09:30 (出發)</b> 從 LRT KLCC 站搭車至 Pasar Seni 站。 ${badgeTransit}</div>
+                            <div class="pt-0.5 leading-relaxed"><b>09:30 (出發)</b> 一樣從飯店步行至 <b>MRT Conlay 站</b> 搭車出發。 ${badgeTransit}</div>
                         </li>
                         <li class="flex items-start">
-                            <div class="pt-0.5 leading-relaxed"><b>10:00</b> 領取：前往中央市場領取昨天完成的 DIY 磁鐵。</div>
+                            <div class="pt-0.5 leading-relaxed"><b>10:00</b> 領取：前往中央市場 (Pasar Seni站) 領取昨天完成的 DIY 磁鐵。</div>
                         </li>
                         <li class="flex items-start">
                             <div class="pt-0.5 leading-relaxed"><b>10:45 (轉乘)</b> 從 Pasar Seni 轉乘 <b>MRT (綠線)</b> 至 <b>Bukit Bintang (武吉免登) 站</b> 下車，步行前往吃肉骨茶。 ${badgeTransit}</div>
                         </li>
                         <li class="flex items-start">
                             <div class="pt-0.5 leading-relaxed"><b>11:00 (肉骨茶對決)</b> 吉隆坡必吃早午餐 (擇一)：<br>
-                                <ul class="mt-2 space-y-2 text-slate-600 border-l-2 border-stone-200 pl-3 ml-1">
-                                    <li>• <b>新峰肉骨茶：</b> 觀光名店，湯頭較為清甜，菜色豐富 ${gmap('Sun Fong Bak Kut Teh')}</li>
-                                    <li>• <b>阿喜肉骨茶：</b> 在地人偏愛，湯頭濃郁藥材味重 ${gmap('Ah Hei Bak Kut Teh')}</li>
+                                <ul class="mt-3 space-y-3 text-slate-600 border-l-2 border-stone-200 pl-3 ml-1">
+                                    <li>• <b>新峰肉骨茶：</b> 觀光名店，湯頭較為清甜。 ${gmap('Sun Fong Bak Kut Teh')}
+                                        <div class="text-xs mt-0.5">必點：正宗大馬藥材湯肉骨茶 (可選半肥瘦)、乾豬腳、油條沾湯。</div>
+                                    </li>
+                                    <li>• <b>阿喜肉骨茶：</b> 在地人偏愛，湯頭濃郁藥材味重。 ${gmap('Ah Hei Bak Kut Teh')}
+                                        <div class="text-xs mt-0.5">必點：排骨肉骨茶、豬肚、滷大腸。</div>
+                                    </li>
                                 </ul>
                             </div>
                         </li>
@@ -482,17 +550,21 @@
                             <div class="pt-0.5 leading-relaxed"><b>13:00 (潮流購物)</b> 步行前往 <b>Pavilion 廣場</b> 周邊 ${gmap("Pavilion Kuala Lumpur")}。買潮流服飾、日系質感選物、挑行李箱與超市掃貨 (請見下方逛街攻略)。</div>
                         </li>
                         <li class="flex items-start">
-                            <div class="pt-0.5 leading-relaxed"><b>15:30 (下午茶)</b> 逛累了去吃冰！極度推薦大馬最強本土冰淇淋 <b>Inside Scoop</b> (必點榴槤或黑炭口味)，或回味 <b>華陽冰室 (Pavilion店)</b> 的酥皮蛋塔。</div>
+                            <div class="pt-0.5 leading-relaxed"><b>15:30 (下午茶)</b> 逛累了去吃冰！極度推薦大馬最強本土冰淇淋 <b>Inside Scoop</b> ${gmap("Inside Scoop Bukit Bintang")}。
+                            ${guideStr("必點：榴槤 (Durian)、黑炭 (Charcoal)、大馬頂級茶 (Teh Tarik) 口味搭配酥脆冰淇淋筒！")}
+                            </div>
                         </li>
                         <li class="flex items-start">
-                            <div class="pt-0.5 leading-relaxed"><b>16:30 (飯店放戰利品與換裝)</b> Wyndham 距離 Pavilion 走路只要 10 分鐘以內，建議先回飯店放東西，並換上 Smart Casual。<br>
+                            <div class="pt-0.5 leading-relaxed"><b>16:30 (飯店放戰利品與換裝)</b> Pavilion 距離 Conlay 站僅一站距離，建議搭 MRT 或走室內空橋回飯店放東西，並換上 Smart Casual。<br>
                             <span class="text-rose-600 font-semibold mt-1 inline-block">⚠️ 服裝提醒：</span> Fuego 規定男士需著長褲、包鞋，勿穿無袖與涼鞋。</div>
                         </li>
                         <li class="flex items-start">
                             <div class="pt-0.5 leading-relaxed"><b>18:15 (前往晚餐)</b> 沿著 Pavilion 與 KLCC 之間的<b>「有冷氣室內空橋」</b>步行回 KLCC 區域，走到底出來就是 Troika 大樓，完全不會熱到流汗。</div>
                         </li>
                         <li class="flex items-start">
-                            <div class="pt-0.5 leading-relaxed"><b>18:30 (已預約) 晚餐：Fuego at Troika</b> ${gmap("Fuego at Troika Sky Dining")}<br>點 Margarita 調酒、Guacamole 酪梨醬、必吃神級烤羊肋排，欣賞雙子塔日落。</div>
+                            <div class="pt-0.5 leading-relaxed"><b>18:30 (已預約) 晚餐：Fuego at Troika</b> ${gmap("Fuego at Troika Sky Dining")}<br>欣賞雙子塔日落點燈魔幻時刻。
+                            ${guideStr("<br>🥑 <b>Fuego Guacamole</b>：現搗酪梨醬與綜合脆片。<br>🐟 <b>Snapper Ceviche</b>：紅鯛魚生醃，微酸微辣開胃。<br>🍖 <b>Grilled Lamb Ribs</b>：炭烤羊肋排，輕咬即骨肉分離！<br>🥦 <b>Cauliflower Steak</b>：烤白花椰菜排，起司與香料極度濃郁。<br>🍩 <b>Fuego Churros</b>：甜點必吃現炸吉拿棒！沾海鹽焦糖與巧克力醬，完美收尾。<br>🍸 <b>微醺推薦</b>：Fuego Margarita 經典瑪格麗特。")}
+                            </div>
                         </li>
                         <li class="flex items-start">
                             <div class="pt-0.5 leading-relaxed"><b>21:00</b> 續攤：從 Fuego 散步去 EQ Hotel 頂樓 <b>Sky 51 (Blue)</b> 高空酒吧 ${gmap("Sky51 EQ Kuala Lumpur")}。</div>
@@ -531,14 +603,21 @@
             },
             {
                 day: "Day 9 (吉隆坡 ➔ 台灣)", date: "3/29 (日)", title: "咖啡香與滿載而歸", icon: "👋",
+                imageDesc: "",
                 details: `
                     <ul class="space-y-5 text-sm px-1">
                         <li class="flex items-start">
                             <div class="pt-0.5 leading-relaxed"><b>09:00 (早午餐抉擇)</b> 為了不拖著行李跑，建議把行李留在飯店，輕裝搭 Grab (約5-10分鐘) 去吃飽再回來退房： ${badgeGrab}<br>
-                                <ul class="mt-3 space-y-3 text-slate-600 border-l-2 border-stone-200 pl-3 ml-1">
-                                    <li>• <b>VCR (Galloway店)</b>：老宅文青風，必吃軟殼蟹漢堡與手沖咖啡。 ${gmap('VCR Kuala Lumpur')}</li>
-                                    <li>• <b>鎰記茶餐室 (Yut Kee)</b>：吉隆坡最火紅的海南傳統早午餐，必點烤豬肉卷與海南雞排！ ${gmap('Yut Kee Restaurant')}</li>
-                                    <li>• <b>Feeka Coffee Roasters</b>：飯店周邊的森林系高質感咖啡廳，早午餐盤非常豐富。 ${gmap('Feeka Coffee Roasters')}</li>
+                                <ul class="mt-3 space-y-4 text-slate-600 border-l-2 border-stone-200 pl-3 ml-1">
+                                    <li>• <b>VCR (Galloway店)</b> ${gmap('VCR Kuala Lumpur')}
+                                        <div class="text-xs mt-0.5 font-bold text-orange-600">💡 必點攻略：軟殼蟹漢堡 (Soft Shell Crab Burger)、單品手沖咖啡。</div>
+                                    </li>
+                                    <li>• <b>鎰記茶餐室 (Yut Kee)</b> ${gmap('Yut Kee Restaurant')}
+                                        <div class="text-xs mt-0.5 font-bold text-orange-600">💡 必點攻略：吉隆坡最火紅的海南傳統早午餐，必吃烤豬肉卷 (Roti Babi) 與海南雞排！</div>
+                                    </li>
+                                    <li>• <b>Feeka Coffee Roasters</b> ${gmap('Feeka Coffee Roasters')}
+                                        <div class="text-xs mt-0.5 font-bold text-orange-600">💡 必點攻略：森林系高質感咖啡廳，推薦 Feeka Breakfast (豐盛大早餐盤) 與 Ricotta Pancakes。</div>
+                                    </li>
                                 </ul>
                             </div>
                         </li>
@@ -546,10 +625,12 @@
                             <div class="pt-0.5 leading-relaxed"><b>11:30</b> 回飯店最後行李打包，辦理退房。</div>
                         </li>
                         <li class="flex items-start">
-                            <div class="pt-0.5 leading-relaxed"><b>12:00 (前往機場)</b> 搭 Grab 前往 KL Sentral 站，轉乘 <b>KLIA Ekspres (機場快線)</b> 直達機場 T1，舒適且不怕塞車。或者直接叫 Grab 直達機場 (約 50 分鐘)。 ${badgeGrab}</div>
+                            <div class="pt-0.5 leading-relaxed"><b>12:00 (前往機場)</b> 搭乘 MRT (從 Conlay 至 Putrajaya Sentral) 轉乘 <b>KLIA Transit (機場支線)</b> 直達機場 T1，舒適且不怕塞車。或者直接叫 Grab 直達機場 (約 50 分鐘)。 ${badgeTransit}</div>
                         </li>
                         <li class="flex items-start">
-                            <div class="pt-0.5 leading-relaxed"><b>13:00 (機場最後掃貨)</b> 在 KLIA T1 可以做最後的免稅品補齊，肚子餓的話可以去吃碗 <b>Madam Kwan's (關太太椰漿飯)</b> 當作道地的道別午餐。</div>
+                            <div class="pt-0.5 leading-relaxed"><b>13:00 (機場最後掃貨)</b> 在 KLIA T1 可以做最後的免稅品補齊，肚子餓的話可以去吃碗 <b>Madam Kwan's (關太太椰漿飯)</b> 當作道地的道別午餐。
+                            ${guideStr("必點：關太太招牌椰漿飯 (Nasi Lemak Bojari)、大馬三色冰 (Teh Tarik)。")}
+                            </div>
                         </li>
                         <li class="flex items-start">
                             <div class="pt-0.5 leading-relaxed"><b>14:30</b> 搭乘華航 CI 722 從吉隆坡 (KUL) 起飛，19:15 抵達台北 (TPE)，帶著滿滿的回憶飛回溫暖的家！ ${badgeFlight}</div>
@@ -574,11 +655,18 @@
         function renderOverviewView() {
             clearActiveTabs();
             tabOverview.classList.add('active');
-            handleTabClick();
+            window.handleTabClick();
             dynamicContent.scrollTop = 0;
             
             dynamicContent.innerHTML = `
                 <div class="fade-in pb-32 max-w-4xl mx-auto w-full">
+                    <!-- Hero Banner -->
+                    <div class="relative w-full h-32 md:h-40 mb-8 rounded-2xl overflow-hidden shadow-sm bg-gradient-to-r from-teal-800 to-orange-500 flex flex-col justify-center px-6 md:px-8">
+                        <span class="text-white/80 font-medium z-0 text-sm tracking-widest"></span>
+                        <div class="absolute inset-0 bg-black/20 z-10"></div>
+                        <h3 class="absolute bottom-4 right-6 text-xl md:text-2xl font-bold text-white tracking-wide z-20 opacity-90">OVERVIEW</h3>
+                    </div>
+
                     <div class="flex justify-between items-center mb-6 px-2 border-b border-stone-200 pb-4">
                         <div>
                             <h2 class="text-2xl md:text-3xl font-bold text-teal-900" style="font-family: Georgia, serif;">🗺️ Trip Overview</h2>
@@ -586,6 +674,7 @@
                         </div>
                     </div>
 
+                    <!-- Highlights Cards -->
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
                         <div class="bg-gradient-to-br from-teal-800 to-teal-900 rounded-2xl p-5 text-white shadow-md">
                             <div class="text-3xl mb-2">🏝️</div>
@@ -601,9 +690,11 @@
                         </div>
                     </div>
 
+                    <!-- Flight Info -->
                     <h3 class="text-lg font-bold text-teal-900 mb-4 px-2">✈️ 航班資訊 (Flights)</h3>
                     <div class="bg-white rounded-2xl p-5 md:p-6 border border-stone-200 shadow-sm mb-6">
                         <div class="space-y-5">
+                            <!-- 3/21 -->
                             <div class="flex flex-col md:flex-row md:items-start pb-5 border-b border-stone-100 gap-4">
                                 <div class="md:w-1/3 flex-shrink-0">
                                     <span class="text-[11px] font-bold bg-stone-100 text-slate-500 px-2 py-1 rounded inline-block mb-2">3/21 (六) 去程</span>
@@ -616,6 +707,7 @@
                                 </div>
                             </div>
                             
+                            <!-- 3/29 -->
                             <div class="flex flex-col md:flex-row md:items-start gap-4">
                                 <div class="md:w-1/3 flex-shrink-0">
                                     <span class="text-[11px] font-bold bg-stone-100 text-slate-500 px-2 py-1 rounded inline-block mb-2">3/29 (日) 回程</span>
@@ -628,9 +720,11 @@
                         </div>
                     </div>
 
+                    <!-- Boat Info -->
                     <h3 class="text-lg font-bold text-teal-900 mb-4 px-2 mt-8">🚢 跨國船班資訊 (Ferries)</h3>
                     <div class="bg-white rounded-2xl p-5 md:p-6 border border-stone-200 shadow-sm mb-8">
                         <div class="space-y-5">
+                            <!-- 3/22 -->
                             <div class="flex flex-col md:flex-row md:items-start pb-5 border-b border-stone-100 gap-4">
                                 <div class="md:w-1/3 flex-shrink-0">
                                     <span class="text-[11px] font-bold bg-blue-50 text-blue-600 px-2 py-1 rounded inline-block mb-2">3/22 (日) 登島</span>
@@ -643,6 +737,7 @@
                                 </div>
                             </div>
 
+                            <!-- 3/26 -->
                             <div class="flex flex-col md:flex-row md:items-start gap-4">
                                 <div class="md:w-1/3 flex-shrink-0">
                                     <span class="text-[11px] font-bold bg-stone-100 text-slate-500 px-2 py-1 rounded inline-block mb-2">3/26 (四) 離島與轉場</span>
@@ -658,6 +753,7 @@
                         </div>
                     </div>
 
+                    <!-- Quick Itinerary -->
                     <h3 class="text-lg font-bold text-teal-900 mb-4 px-2 mt-8">📅 每日快速動線</h3>
                     <div class="bg-white rounded-2xl p-5 border border-stone-200 shadow-sm space-y-3">
                         <div class="flex text-sm"><b class="w-16 text-teal-700 flex-shrink-0">Day 1:</b> <span class="leading-relaxed">抵達吉隆坡轉機 ➔ 蘭卡威週六夜市</span></div>
@@ -678,12 +774,20 @@
         function renderFinanceView() {
             clearActiveTabs();
             tabFinance.classList.add('active');
-            handleTabClick();
+            window.handleTabClick();
             dynamicContent.scrollTop = 0;
             
             dynamicContent.innerHTML = `
                 <div class="fade-in pb-32 max-w-5xl mx-auto w-full">
                     
+                    <!-- Hero Banner -->
+                    <div class="relative w-full h-32 md:h-40 mb-8 rounded-2xl overflow-hidden shadow-sm bg-gradient-to-r from-emerald-800 to-teal-600 flex flex-col justify-center px-6 md:px-8">
+                        <span class="text-white/80 font-medium z-0 text-sm tracking-widest"></span>
+                        <div class="absolute inset-0 bg-black/20 z-10"></div>
+                        <h3 class="absolute bottom-4 right-6 text-xl md:text-2xl font-bold text-white tracking-wide z-20 opacity-90">FINANCE</h3>
+                    </div>
+
+                    <!-- Expense Tracker -->
                     <div class="bg-white rounded-2xl p-5 md:p-8 border border-stone-200 shadow-md mb-8">
                         <div class="flex justify-between items-center mb-6">
                             <h2 class="text-2xl font-bold text-teal-900" style="font-family: Georgia, serif;">💰 旅費隨手記</h2>
@@ -723,6 +827,7 @@
                         </div>
                     </div>
 
+                    <!-- Budget Estimate -->
                     <div class="bg-white rounded-2xl p-5 md:p-8 border border-stone-200 shadow-sm mb-8">
                         <h2 class="text-xl font-bold text-teal-900 mb-6 border-b border-stone-100 pb-3">📊 當地總花費預估 (不含機加酒)</h2>
                         <div class="flex flex-col xl:flex-row gap-8 items-center">
@@ -752,6 +857,7 @@
                         </div>
                     </div>
 
+                    <!-- Exchange Strategy -->
                     <div class="bg-white rounded-2xl p-5 md:p-8 border border-stone-200 shadow-sm">
                         <h2 class="text-xl font-bold text-teal-900 mb-4 border-b border-stone-100 pb-3">💳 換匯與支付戰略</h2>
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -835,19 +941,25 @@
             clearActiveTabs();
             const btn = document.getElementById(`btn-day-${index}`);
             if(btn) btn.classList.add('active');
-            handleTabClick();
+            window.handleTabClick();
             dynamicContent.scrollTop = 0;
             
             const dayObj = itineraryData[index];
             const displayDayStr = dayObj.day.split(' (')[0]; 
             const locStr = dayObj.day.split(' (')[1] ? `(${dayObj.day.split(' (')[1]}` : '';
             const fullTitle = dayObj.title;
+            const imgDesc = dayObj.imageDesc;
             
             dynamicContent.innerHTML = `
                 <div class="fade-in pb-32 max-w-4xl mx-auto w-full">
-                    <div class="relative w-full h-24 md:h-32 mb-8 rounded-2xl overflow-hidden shadow-sm bg-gradient-to-r from-teal-900 via-teal-800 to-[#1d3557] flex flex-col justify-center px-6 md:px-8">
-                        <div class="text-teal-200/80 text-xs md:text-sm font-semibold tracking-widest uppercase mb-1">${displayDayStr} <span class="ml-2">${locStr}</span></div>
-                        <h3 class="text-xl md:text-3xl font-bold text-white tracking-wide z-20" style="font-family: Georgia, serif;">${fullTitle}</h3>
+                    <!-- Slim Gradient Banner (Tropical Theme) -->
+                    <div class="relative w-full h-24 md:h-32 mb-8 rounded-2xl overflow-hidden shadow-sm bg-gradient-to-br from-teal-900 via-teal-800 to-[#1d3557] flex flex-col justify-center px-6 md:px-8">
+                        <span class="text-white/70 font-medium z-0 text-xs tracking-widest">${imgDesc}</span>
+                        <div class="absolute inset-0 bg-black/20 z-10"></div>
+                        <div class="absolute bottom-4 left-6 z-20">
+                            <div class="text-teal-200/90 text-xs md:text-sm font-semibold tracking-widest uppercase mb-1 drop-shadow-md">${displayDayStr} <span class="ml-2">${locStr}</span></div>
+                            <h3 class="text-xl md:text-3xl font-bold text-white tracking-wide drop-shadow-md" style="font-family: Georgia, serif;">${fullTitle}</h3>
+                        </div>
                     </div>
                     
                     <div class="px-2 md:px-4 bg-white rounded-2xl p-6 shadow-sm border border-stone-100">
